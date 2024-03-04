@@ -1,46 +1,52 @@
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 
 from browser import Browser
 
-
 class Register(Browser):
 
-    EMAIL_FIELD_SELECTOR = (By.CLASS_NAME, 'pizokel_customer_register_email')
-    PASSWORD_FIELD_SELECTOR = (By.ID, 'pizokel_customer_register_password')
-    CREEAZA_CONT_BUTTON_SELECTOR = (By.CSS_SELECTOR, '#pizokel_customer_register_submit')
-    TERMS_AND_CONDITIONS_SELECTOR = (By.XPATH, '//input[@id="register-termscheck"]')
-    REGISTER_ALERT_SELECTOR = (By.XPATH, '//h4[contains(text(), "Ne pare rau dar nu putem finaliza procesul de creare cont pentru aceasta adresa de email. Folosește una din metodele existente de social login precum eMAG , Facebook, Google sau Apple.")]')
-    TERMS_AND_CONDITIONS_ERROR = (By.XPATH, '//div[contains(text(), "Te rugam sa accepti termenii si conditiile pentru a putea continua cu crearea contului")]')
-    WRONG_EMAIL_ERROR = (By.XPATH, '//div[contains(text(), "Adresa de Email nu este completata corect (exemplu: nume@exemplu.com)")]')
-    SHORT_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Te rugam sa introduci minim 6 caractere. Spatiile de la inceputul sau finalul acestora vor fi ignorate.")]')
-    MANDATORY_FIELD_ERROR = (By.XPATH, '//div[contains(text(), "Acest camp este obligatoriu")]')
+    LAST_NAME_FIELD_SELECTOR = (By.ID, 'lastname')
+    FIRST_NAME_FIELD_SELECTOR = (By.CSS_SELECTOR, '#firstname')
+    EMAIL_FIELD_SELECTOR = (By.CSS_SELECTOR, '#email_address')
+    PASSWORD_FIELD_SELECTOR = (By.CSS_SELECTOR, '[title="Parolă"]')
+    CONFIRM_PASSWORD_FIELD_SELECTOR = (By.CSS_SELECTOR, '#password-confirmation')
+    REGISTER_BUTTON = (By.CLASS_NAME, 'rlogin-button')
+    TERMS_AND_CONDITIONS_SELECTOR = (By.CSS_SELECTOR, '[for="privacyGDPR"]')
+    WRONG_EMAIL_ERROR = (By.XPATH, '//div[contains(text(), "Introduceți o adresă email validă (Ex: johndoe@domain.com).")]')
+    SHORT_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Lungimea minima a acestui camp trebuie sa fie egala sau mai mare de 8 simboluri. Spatiile vor fi ignorate.")]')
+    CHARACTERS_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Minimul diferitelor clase de caractere din parola este de 3. Clase de caractere: litere mici, majuscule, cifre, caractere speciale.")]')
+    SAME_VALUE_CONFIRMATION_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(),"Va rugam sa introduceti din nou aceeasi valoare.")]')
+    MANDATORY_FIELDS_ERROR = (By.XPATH, '//div[contains(text(), "Acesta este un câmp obligatoriu.")]')
+    SUCCESSFUL_REGISTER_MESSAGE = (By.XPATH, '//div[contains(text(), "Vă mulțumim că v-ați înregistrat la Flanco")]')
+    SAME_EMAIL_REGISTRATION_ERROR = (By.CSS_SELECTOR, '.textMessageAddToCard')
 
 
     def navigate_to_register_page(self):
-        self.driver.get('https://www.fashiondays.ro/customer/authentication/register')
+        self.driver.get('https://www.flanco.ro/customer/account/create/?referer=aHR0cHM6Ly93d3cuZmxhbmNvLnJvLz9nYWRfc291cmNlPTE=')
+
+    def get_last_name(self, lastname):
+        self.driver.find_element(*self.LAST_NAME_FIELD_SELECTOR).send_keys(lastname)
+
+    def get_first_name(self, firstname):
+        self.driver.find_element(*self.FIRST_NAME_FIELD_SELECTOR).send_keys(firstname)
 
     def enter_email(self, email):
         self.driver.find_element(*self.EMAIL_FIELD_SELECTOR).send_keys(email)
 
+    def same_email_error(self):
+        return self.driver.find_element(*self.SAME_EMAIL_REGISTRATION_ERROR).text
+
     def enter_password(self, password):
         self.driver.find_element(*self.PASSWORD_FIELD_SELECTOR).send_keys(password)
 
-    def press_creeaza_cont_button(self):
-        self.driver.find_element(*self.CREEAZA_CONT_BUTTON_SELECTOR).click()
+    def confirm_password(self, confpassw):
+        self.driver.find_element(*self.CONFIRM_PASSWORD_FIELD_SELECTOR).send_keys(confpassw)
 
-    def get_register_option_alert(self):
-        return self.driver.find_element(*self.REGISTER_ALERT_SELECTOR).text
+    def press_ma_inregistrez_button(self):
+        self.driver.find_element(*self.REGISTER_BUTTON).click()
 
     def terms_and_conditions(self):
-        # action = ActionChains(self.driver)
-        # terms_conditions = self.driver.find_element(*self.TERMS_AND_CONDITIONS_SELECTOR)
-        # action.move_to_element_with_offset(terms_conditions, 1, 1).click().perform()
         self.driver.find_element(*self.TERMS_AND_CONDITIONS_SELECTOR).click()
-
-    def get_terms_and_conditions_error(self):
-        return self.driver.find_element(*self.TERMS_AND_CONDITIONS_ERROR).text
 
     def get_wrong_email_error(self):
         return self.driver.find_element(*self.WRONG_EMAIL_ERROR).text
@@ -48,7 +54,16 @@ class Register(Browser):
     def get_short_password_error(self):
         return self.driver.find_element(*self.SHORT_PASSWORD_ERROR).text
 
-    def get_mandatory_field_error(self):
-        return self.driver.find_element(*self.MANDATORY_FIELD_ERROR).text
+    def get_characters_password_error(self):
+        return self.driver.find_element(*self.CHARACTERS_PASSWORD_ERROR).text
+
+    def get_same_value_confirmation_password_error(self):
+        return self.driver.find_element(*self.SAME_VALUE_CONFIRMATION_PASSWORD_ERROR).text
+
+    def get_mandatory_fields_error(self):
+        return self.driver.find_element(*self.MANDATORY_FIELDS_ERROR).text
+
+    def get_successful_register_message(self):
+        return self.driver.find_element(*self.SUCCESSFUL_REGISTER_MESSAGE).text
 
 
