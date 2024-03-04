@@ -13,7 +13,7 @@ Feature: Register Feature
 #  Scenario: Register with wrong credentials
 #    When I enter "Andrei" in lastname field for registration
 #    And I enter "George" in firstname field for registration
-#    And I enter "{email}" in email field for registration
+#    And I enter "marius232@yahoo.com" in email field for registration
 #    And I enter "parola1234*" in password field for registration
 #    And I enter "parola1234*" in confirmation password field for registration
 #    And I click on terms and conditions box
