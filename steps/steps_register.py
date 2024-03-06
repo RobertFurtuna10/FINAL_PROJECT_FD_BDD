@@ -1,6 +1,7 @@
 import time
-
+from faker import Faker
 from behave import *
+
 
 @given('I am on the register page')
 def step_impl(context):
@@ -14,8 +15,14 @@ def step_impl(context, lastname):
 def step_impl(context, firstname):
     context.Register.get_first_name(firstname)
 
-@when('I enter "{email}" in email field for registration')
-def step_impl(context, email):
+@when('I enter "{emails}" in email field for registration')
+def step_impl(context, emails):
+    context.Register.enter_email(emails)
+
+@when('I enter a new email address in email field for registration')
+def step_impl(context):
+    fake = Faker()
+    email = fake.email()
     context.Register.enter_email(email)
 
 @when('I enter "{passwword}" in password field for registration')
@@ -30,7 +37,6 @@ def step_impl(context, confpassw):
 def step_impl(context):
     context.Register.terms_and_conditions()
     time.sleep(2)
-
 
 @when('I press on ma inregistrez button')
 def step_impl(context):
@@ -50,13 +56,11 @@ def step_impl(context):
     expected_alert_message = 'Vă mulțumim că v-ați înregistrat la Flanco'
     assert actual_alert_mesasge in expected_alert_message
 
-
 @then('I should see an error for email')
 def step_impl(context):
     expected_error_message = context.Register.get_wrong_email_error()
     actual_error_message = "Introduceți o adresă email validă (Ex: johndoe@domain.com)."
     assert expected_error_message in actual_error_message
-
 
 @then('I should see an error message for short password')
 def step_impl(context):

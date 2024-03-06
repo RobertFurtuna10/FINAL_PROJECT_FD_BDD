@@ -1,5 +1,3 @@
-from selenium.webdriver.common.by import By
-
 
 from browser import Browser
 from locators.RegisterLocators import RegisterLocators
@@ -16,8 +14,8 @@ class Register(Browser):
     def get_first_name(self, firstname):
         self.driver.find_element(*RegisterLocators.FIRST_NAME_FIELD_SELECTOR).send_keys(firstname)
 
-    def enter_email(self, email):
-        self.driver.find_element(*RegisterLocators.EMAIL_FIELD_SELECTOR).send_keys(email)
+    def enter_email(self, emails):
+        self.driver.find_element(*RegisterLocators.EMAIL_FIELD_SELECTOR).send_keys(emails)
 
     def same_email_error(self):
         return self.driver.find_element(*RegisterLocators.SAME_EMAIL_REGISTRATION_ERROR).text

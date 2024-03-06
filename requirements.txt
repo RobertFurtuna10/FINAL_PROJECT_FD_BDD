@@ -2,3 +2,4 @@ behave == 1.2.6
 selenium == 4.18.1
 webdriver-manager == 4.0.1
 behave-html-formatter == 0.9.10
+Faker == 24.0.0

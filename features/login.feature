@@ -1,7 +1,7 @@
 Feature: Login Feature
+
   Background:
     Given I am on the login page
-
 
   @login_wrong_credentials
   Scenario: Login with wrong credentials
