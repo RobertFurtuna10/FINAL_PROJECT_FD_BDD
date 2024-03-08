@@ -21,3 +21,17 @@ Welcome to the documentation for the automated testing project designed for the 
     - [Activate the Virtual Environment](#activate-the-virtual-environment)
     - [Run the Test Suite](#run-the-test-suite)
 5. [Conclusion](#conclusion)
+
+# Introduction :notebook:
+
+This project aims to implement automated tests for the Flanco.ro website using BDD framework. The primary objectives include simulating user login and register options through the webshop's functionalities.
+
+- **editor code used: pycharm**
+- **Library Versions:**
+    ```bash
+     behave == 1.2.6
+	 selenium == 4.18.1
+	 webdriver-manager == 4.0.1
+     behave-html-formatter == 0.9.10
+     Faker == 24.0.0
+    ```
