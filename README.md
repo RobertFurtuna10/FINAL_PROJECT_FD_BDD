@@ -431,3 +431,8 @@ def before_all(context):
 def after_all(context):
     context.browser.close()
 ```
+
+- **venv**: The virtual environment directory.
+- **behave.ini**: Serves as a configuration file for Behave, the behavior-driven development (BDD) testing framework in Python. It allows to specify various settings and options for Behave, including options related to formatters, logging, and other behavior settings.
+- **requirements.txt**: Lists all the required dependencies for the project. Install these dependencies before running the tests.
+- **behave-script**: Parses the feature files, matches steps to their corresponding step definitions, and executes the tests. It provides detailed reports on the execution status of each scenario and step, helping to understand which tests passed, failed, or encountered issues.
