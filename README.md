@@ -486,7 +486,13 @@ def after_all(context):
 Execute the automated tests to verify the Flanco.ro website's login and register functionalities.
 
 # Reports
- 
+
+The project automatically generates detailed reports for each test scenario executed by Behave, offering comprehensive insights into the results of individual tests. These reports meticulously document the outcomes of each scenario, facilitating thorough analysis and easy identification of any encountered issues.
+
+- Here's the execution report generated for the Login and Register functionalities on March 6, 2024.
+
+![Execution Report](http://localhost:63342/FINAL_PROJECT_FLANCO_BDD/test-reports/execution_report.html?_ijt=d4uncpqf94bjsqvksti0dongjq&_ij_reload=RELOAD_ON_SAVE#)
+![TestReport Login](https://github.com/AdrianPricopie/PythonUnitTestPOMBasedProject/blob/master/TestReportSearch.png)
  
 
 
