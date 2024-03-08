@@ -403,3 +403,31 @@ time: Used for introducing delays in the test execution, providing a pause betwe
 faker: This library is used to generate fake data such as names and email addresses. In this particular case, the fake library is used to generate a new email address each time the registration functionality is tested with valid credentials. Without this library, the test would not pass because if the same email is entered twice, the account registration cannot be successful.
 
 behave: This is the primary BDD testing framework for Python.
+- **browser-file**: The following Browser class defines a simple wrapper around the Selenium WebDriver to manage the browser instance. It initializes a Chrome WebDriver instance, maximizes the window, and sets an implicit wait time of 3 seconds for finding elements before throwing an exception.
+```python
+from selenium import webdriver
+
+class Browser:
+
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    driver.implicitly_wait(3)
+
+    def close(self):
+        self.driver.quit()
+```
+- **environment-file**: This environment.py file is used in conjunction with Behave, the BDD testing framework, to set up and tear down test environments before and after test execution. It imports necessary modules, initializes objects, and defines hooks to execute setup and teardown actions.
+```python
+from browser import Browser
+from pages.login_page import LoginPage
+from pages.register_page import Register
+
+
+def before_all(context):
+    context.browser = Browser()
+    context.LoginPage = LoginPage()
+    context.Register = Register()
+
+def after_all(context):
+    context.browser.close()
+```
