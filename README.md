@@ -436,3 +436,25 @@ def after_all(context):
 - **behave.ini**: Serves as a configuration file for Behave, the behavior-driven development (BDD) testing framework in Python. It allows to specify various settings and options for Behave, including options related to formatters, logging, and other behavior settings.
 - **requirements.txt**: Lists all the required dependencies for the project. Install these dependencies before running the tests.
 - **behave-script**: Parses the feature files, matches steps to their corresponding step definitions, and executes the tests. It provides detailed reports on the execution status of each scenario and step, helping to understand which tests passed, failed, or encountered issues.
+
+## Feature under testing
+ ### Login Functionality Testing:
+1.Login with wrong credentials.
+2. Login with wrong email format.
+3. Login with only password
+4. Enter Intra in cont button with email and password fields empty
+5. Enter only email
+6. Enter short password
+
+ ### Register Functionality Testing:
+1. Register with empty fiels
+2. Register with correct credentials
+3. Register with same email
+4. Register with wrong email format
+5. Enter short password
+6. Register with wrong password characters
+7. Register with different password and confirmation password characters
+ 
+ 
+
+
