@@ -19,7 +19,7 @@ Welcome to the documentation for the automated testing project designed for the 
     - [Clone the Repository](#clone-the-repository)
     - [Install Dependencies](#install-dependencies)
     - [Activate the Virtual Environment](#activate-the-virtual-environment)
-    - [Run the Test Suite](#run-the-test-suite)
+    - [Run the tests](#run-the-tests)
 5. [Conclusion](#conclusion)
 
 # Introduction :notebook:
@@ -454,6 +454,38 @@ def after_all(context):
 5. Enter short password
 6. Register with wrong password characters
 7. Register with different password and confirmation password characters
+
+## Getting Started  :pushpin:
+
+1. **Clone the Repository:**
+
+    ```bash
+    git clone https://github.com/RobertFurtuna10/FINAL_PROJECT_FLANCO_BDD.git
+    ```
+
+2. **Install Dependencies:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. **Activate the Virtual Environment:**
+
+    ```bash
+    venv/Scripts/Activate
+    ```
+
+4. **Run the tests:**
+
+    ```bash
+    behave
+    ```
+
+# Usage
+
+Execute the automated tests to verify the Flanco.ro website's login and register functionalities.
+
+# Reports
  
  
 
