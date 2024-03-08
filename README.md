@@ -399,5 +399,7 @@ def step_impl(context):
     assert expected_error_message in actual_error_message
 ```
 time: Used for introducing delays in the test execution, providing a pause between actions.
+
 faker: This library is used to generate fake data such as names and email addresses. In this particular case, the fake library is used to generate a new email address each time the registration functionality is tested with valid credentials. Without this library, the test would not pass because if the same email is entered twice, the account registration cannot be successful.
+
 behave: This is the primary BDD testing framework for Python.
