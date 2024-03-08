@@ -1,5 +1,3 @@
-import time
-
 from behave import *
 
 @given('I am on the login page')

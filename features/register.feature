@@ -9,7 +9,7 @@ Feature: Register Feature
     Then I should see a mandatory fill field error for all the fields
 
   @register_with_correct_credentials
-  Scenario: Register with wrong credentials
+  Scenario: Register with correct credentials
     When I enter "Andrei" in lastname field for registration
     And I enter "George" in firstname field for registration
     And I enter a new email address in email field for registration
