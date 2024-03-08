@@ -491,7 +491,7 @@ The project automatically generates detailed reports for each test scenario exec
 
 - Here's the execution report generated for the Login and Register functionalities on March 6, 2024.
 
-![Execution Report](http://localhost:63342/FINAL_PROJECT_FLANCO_BDD/test-reports/execution_report.html?_ijt=d4uncpqf94bjsqvksti0dongjq&_ij_reload=RELOAD_ON_SAVE#)
+![Execution Report](https://github.com/RobertFurtuna10/FINAL_PROJECT_FLANCO_BDD/blob/master/execution%20report.pdf)
 ![TestReport Login](https://github.com/AdrianPricopie/PythonUnitTestPOMBasedProject/blob/master/TestReportSearch.png)
  
 
