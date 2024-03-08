@@ -439,7 +439,7 @@ def after_all(context):
 
 ## Feature under testing
  ### Login Functionality Testing:
-1.Login with wrong credentials.
+1. Login with wrong credentials.
 2. Login with wrong email format.
 3. Login with only password
 4. Enter Intra in cont button with email and password fields empty
