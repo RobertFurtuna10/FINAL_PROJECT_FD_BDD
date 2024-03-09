@@ -55,6 +55,7 @@ def step_impl(context):
     actual_alert_mesasge = context.Register.get_successful_register_message()
     expected_alert_message = 'Vă mulțumim că v-ați înregistrat la Flanco'
     assert actual_alert_mesasge in expected_alert_message
+    time.sleep(2)
 
 @then('I should see an error for email')
 def step_impl(context):
