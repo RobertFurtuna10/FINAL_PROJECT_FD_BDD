@@ -2,7 +2,7 @@
 Welcome to the documentation for the automated testing project designed for the Flanco.ro website. This project contains the source code and specifications, utilizing Behavior-Driven Development (BDD) principles to drive development, ensuring the functionality and reliability of Flanco.ro's webshop.
 ## Table of Contents
 
-1. [Introduction/Tools and version](#tools-and-versions)
+1. [Introduction/Tools and version](#introduction-notebook)
 2. [Project Structure](#project-structure)
     - [Features](#features)
     - [Locators](#locators)
