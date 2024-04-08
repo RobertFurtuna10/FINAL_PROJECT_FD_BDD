@@ -48,42 +48,51 @@ Feature: Login Feature
     Given I am on the login page
 
   @login_wrong_credentials
-  Scenario: Login with wrong credentials
-    When I enter "email@yahoo.com" in email field
-    And I enter "password10" in password field
-    And I press login button
+  Scenario Outline: Login with wrong credentials
+    When I enter "<email>" in email field
+    And I enter "<password>" in password field
+    And I press autentifica-ma button
     Then I should see an error message
+
+    Examples:
+    |          email      |  password        |
+    |   email@yahoo.com   | password10       |
+    |wrong-email@gmail.com| parola123        |
+    |  robert@email.ro    | wrongpass        |
+
+
 
   @login_wrong_email_format
   Scenario: Enter wrong email format
     When I enter "email.com" in email field
-    And I press login button
+    And I press autentifica-ma button
     Then I should see an error for valid email request
     And I should see an error for password field
 
   @login_only_password
   Scenario: Enter only password
     When I enter "password2*" in password field
-    And I press login button
+    And I press autentifica-ma button
     Then I should see an error under email field
 
   @login_empty_fields
-  Scenario: Enter Intra in cont button with email and password fields empty
-    When I press login button
+  Scenario: Enter autentifica-ma button with email and password fields empty
+    When I press autentifica-ma button
     Then I should see an error under email field
     And I should see an error for password field
 
   @login_only_email
   Scenario: Enter only email
     When I enter "robert@yahoo.com" in email field
-    And I press login button
+    And I press autentifica-ma button
     Then I should see an error for password field
 
   @login_short_password
   Scenario: Enter short password
     When I enter "123" in password field
-    And I press login button
+    And I press autentifica-ma button
     Then I should see an error for short password
+
 ```
 ```python
 Feature: Register Feature
@@ -135,7 +144,7 @@ Feature: Register Feature
     Then I should see an error for wrong characters on password field
 
   @register_with_different_password_and_confirmation_password
-  Scenario: Enter different passwords in password and confirmation password fiels
+  Scenario: Enter different passwords in password and confirmation password fields
     When I enter "furtuna12345*" in password field for registration
     And I enter "abc" in confirmation password field for registration
     And I press on ma inregistrez button
@@ -207,6 +216,7 @@ class LoginPage(Browser):
         return self.driver.find_element(*LoginLocators.SHORT_PASSWORD_ERROR).text
 ```
 ```python
+from faker import Faker
 from browser import Browser
 from locators.RegisterLocators import RegisterLocators
 
@@ -257,7 +267,14 @@ class Register(Browser):
 
     def get_successful_register_message(self):
         return self.driver.find_element(*RegisterLocators.SUCCESSFUL_REGISTER_MESSAGE).text
+
+    def get_random_email(self):
+        fake = Faker()
+        email = fake.email()
+        self.enter_email(email)
 ```
+faker: This library is used to generate fake data such as names and email addresses. In this particular case, the fake library is used to generate a new email address each time the registration functionality is tested with valid credentials. Without this library, the test would not pass because if the same email is entered twice, the account registration cannot be successful.
+
 - **steps**: Are written in the Gherkin syntax and correspond to scenarios described in feature files. Each step has a specific keyword (Given, When, Then) that signifies the type of action being performed. These steps are then implemented in code as step definitions, which execute the corresponding actions on the system under test and perform assertions to verify expected outcomes. The steps_login file contains step definitions that implement the actions described in the login feature's scenarios. These step definitions interact with the LoginPage class, which represents the login page of the application, to perform actions and validate expected outcomes during test execution.
 ```python
 from behave import *
@@ -274,7 +291,7 @@ def step_impl(context, email):
 def step_impl(context, password):
     context.LoginPage.enter_password(password)
 
-@when('I press login button')
+@when('I press autentifica-ma button')
 def step_impl(context):
     context.LoginPage.click_autentifica_ma_button()
 
@@ -311,7 +328,6 @@ def step_imp(context):
 The following steps are tailored to the specific registration process of the Flanco.ro website, allowing for automated testing and validation of the registration feature.
 ```python
 import time
-from faker import Faker
 from behave import *
 
 
@@ -333,9 +349,7 @@ def step_impl(context, emails):
 
 @when('I enter a new email address in email field for registration')
 def step_impl(context):
-    fake = Faker()
-    email = fake.email()
-    context.Register.enter_email(email)
+    context.Register.get_random_email()
 
 @when('I enter "{passwword}" in password field for registration')
 def step_impl(context, passwword):
@@ -367,6 +381,7 @@ def step_impl(context):
     actual_alert_mesasge = context.Register.get_successful_register_message()
     expected_alert_message = 'Vă mulțumim că v-ați înregistrat la Flanco'
     assert actual_alert_mesasge in expected_alert_message
+    time.sleep(2)
 
 @then('I should see an error for email')
 def step_impl(context):
@@ -399,8 +414,6 @@ def step_impl(context):
     assert expected_error_message in actual_error_message
 ```
 time: Used for introducing delays in the test execution, providing a pause between actions.
-
-faker: This library is used to generate fake data such as names and email addresses. In this particular case, the fake library is used to generate a new email address each time the registration functionality is tested with valid credentials. Without this library, the test would not pass because if the same email is entered twice, the account registration cannot be successful.
 
 behave: This is the primary BDD testing framework for Python.
 - **browser-file**: The following Browser class defines a simple wrapper around the Selenium WebDriver to manage the browser instance. It initializes a Chrome WebDriver instance, maximizes the window, and sets an implicit wait time of 3 seconds for finding elements before throwing an exception.
