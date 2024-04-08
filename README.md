@@ -508,7 +508,7 @@ Execute the automated tests to verify the Flanco.ro website's login and register
 
 The project automatically generates detailed reports for each test scenario executed by Behave, offering comprehensive insights into the results of individual tests. These reports meticulously document the outcomes of each scenario, facilitating thorough analysis and easy identification of any encountered issues. This project has 2 features under tests, 13 scenarios and a total of 49 steps 
 
-- Here's the execution report generated for the Login and Register functionalities on March 6, 2024.
+- Here's the execution report generated for the Login and Register functionalities on April 8, 2024.
 
 ![Execution Report](https://github.com/RobertFurtuna10/FINAL_PROJECT_FLANCO_BDD/blob/master/execution%20report.pdf)
 
