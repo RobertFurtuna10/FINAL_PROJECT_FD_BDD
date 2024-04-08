@@ -189,6 +189,10 @@ class RegisterLocators:
 By: Enumeration class provided by the Selenium WebDriver library. It is used to specify the mechanism by which elements on a web page will be located. These locators will be used by the test automation code to find and interact with the corresponding elements on the web page. Using By ensures a consistent and reliable way to locate elements across different web pages and browsers.
 - **pages**: Contains classes representing specific pages on the Flanco.ro website. Each class encapsulates interactions and elements unique to that page.
 ```python
+from browser import Browser
+from locators.LoginLocators import LoginLocators
+
+
 class LoginPage(Browser):
 
     def navigate_to_login_page(self):
