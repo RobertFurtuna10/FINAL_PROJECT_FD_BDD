@@ -1,5 +1,4 @@
 import time
-from faker import Faker
 from behave import *
 
 
@@ -21,9 +20,7 @@ def step_impl(context, emails):
 
 @when('I enter a new email address in email field for registration')
 def step_impl(context):
-    fake = Faker()
-    email = fake.email()
-    context.Register.enter_email(email)
+    context.Register.get_random_email()
 
 @when('I enter "{passwword}" in password field for registration')
 def step_impl(context, passwword):

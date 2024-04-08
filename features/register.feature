@@ -8,17 +8,6 @@ Feature: Register Feature
     When I press on ma inregistrez button
     Then I should see a mandatory fill field error for all the fields
 
-  @register_with_correct_credentials
-  Scenario: Register with correct credentials
-    When I enter "Andrei" in lastname field for registration
-    And I enter "George" in firstname field for registration
-    And I enter a new email address in email field for registration
-    And I enter "parola1234*" in password field for registration
-    And I enter "parola1234*" in confirmation password field for registration
-    And I click on terms and conditions box
-    And I press on ma inregistrez button
-    Then I should see a succsessful registration text message
-
   @register_with_same_email
   Scenario: Register with same email
     When I enter "Mario" in lastname field for registration
@@ -47,12 +36,22 @@ Feature: Register Feature
     Then I should see an error for wrong characters on password field
 
   @register_with_different_password_and_confirmation_password
-  Scenario: Enter different passwords in password and confirmation password fiels
+  Scenario: Enter different passwords in password and confirmation password fields
     When I enter "furtuna12345*" in password field for registration
     And I enter "abc" in confirmation password field for registration
     And I press on ma inregistrez button
     Then I should see an error for same password on confirm password field
 
+   @register_with_correct_credentials
+  Scenario: Register with correct credentials
+    When I enter "Andrei" in lastname field for registration
+    And I enter "George" in firstname field for registration
+    And I enter a new email address in email field for registration
+    And I enter "parola1234*" in password field for registration
+    And I enter "parola1234*" in confirmation password field for registration
+    And I click on terms and conditions box
+    And I press on ma inregistrez button
+    Then I should see a succsessful registration text message
 
 
 

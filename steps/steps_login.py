@@ -12,7 +12,7 @@ def step_impl(context, email):
 def step_impl(context, password):
     context.LoginPage.enter_password(password)
 
-@when('I press login button')
+@when('I press autentifica-ma button')
 def step_impl(context):
     context.LoginPage.click_autentifica_ma_button()
 
@@ -45,3 +45,4 @@ def step_imp(context):
     actual_error_message = context.LoginPage.get_short_password_error_message()
     expected_error_message = 'Please enter 6 or more characters. Leading and trailing spaces will be ignored.'
     assert actual_error_message in expected_error_message
+

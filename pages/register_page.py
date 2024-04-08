@@ -1,3 +1,4 @@
+from faker import Faker
 
 from browser import Browser
 from locators.RegisterLocators import RegisterLocators
@@ -50,4 +51,7 @@ class Register(Browser):
     def get_successful_register_message(self):
         return self.driver.find_element(*RegisterLocators.SUCCESSFUL_REGISTER_MESSAGE).text
 
-
+    def get_random_email(self):
+        fake = Faker()
+        email = fake.email()
+        self.enter_email(email)
