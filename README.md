@@ -161,9 +161,9 @@ class LoginLocators:
     PASSWORD_FIELD_SELECTOR = (By.CSS_SELECTOR, '[name="login[password]"]')
     LOGIN_BUTTON_SELECTOR = (By.CSS_SELECTOR, '#send2')
     ERROR_MESSAGE = (By.CLASS_NAME, 'textMessageAddToCard')
-    FIELD_ERROR = (By.XPATH, '//div[contains(text(), "Acesta este un câmp obligatoriu.")]')
+    FIELD_ERROR = (By.CSS_SELECTOR, '[class="mage-error"]')
+    PASSWORD_FIELD_ERROR = (By.CSS_SELECTOR, '#pass-error')
     INVALID_MAIL_ERROR = (By.CSS_SELECTOR, '#email-error')
-    SHORT_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Please enter 6 or more characters. Leading and trailing spaces will be ignored.")]')
 ```
 ```python
 from selenium.webdriver.common.by import By
@@ -178,17 +178,17 @@ class RegisterLocators:
     CONFIRM_PASSWORD_FIELD_SELECTOR = (By.CSS_SELECTOR, '#password-confirmation')
     REGISTER_BUTTON = (By.CLASS_NAME, 'rlogin-button')
     TERMS_AND_CONDITIONS_SELECTOR = (By.CSS_SELECTOR, '[for="privacyGDPR"]')
-    WRONG_EMAIL_ERROR = (By.XPATH, '//div[contains(text(), "Introduceți o adresă email validă (Ex: johndoe@domain.com).")]')
-    SHORT_PASSWORD_ERROR = (By.XPATH,'//div[contains(text(), "Lungimea minima a acestui camp trebuie sa fie egala sau mai mare de 8 simboluri. Spatiile vor fi ignorate.")]')
-    CHARACTERS_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Minimul diferitelor clase de caractere din parola este de 3. Clase de caractere: litere mici, majuscule, cifre, caractere speciale.")]')
-    SAME_VALUE_CONFIRMATION_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(),"Va rugam sa introduceti din nou aceeasi valoare.")]')
-    MANDATORY_FIELDS_ERROR = (By.XPATH, '//div[contains(text(), "Acesta este un câmp obligatoriu.")]')
-    SUCCESSFUL_REGISTER_MESSAGE = (By.XPATH, '//div[contains(text(), "Vă mulțumim că v-ați înregistrat la Flanco")]')
+    WRONG_EMAIL_ERROR = (By.CSS_SELECTOR, '#email_address-error')
+    PASSWORD_ERROR_MESSAGE = (By.CSS_SELECTOR, '#password-error')
+    SAME_VALUE_CONFIRMATION_PASSWORD_ERROR = (By.CSS_SELECTOR, '#password-confirmation-error')
+    MANDATORY_FIELDS_ERROR = (By.CSS_SELECTOR, '[class="mage-error"]')
+    SUCCESSFUL_REGISTER_MESSAGE = (By.CSS_SELECTOR, '.message-success')
     SAME_EMAIL_REGISTRATION_ERROR = (By.CSS_SELECTOR, '.textMessageAddToCard')
 ```
 By: Enumeration class provided by the Selenium WebDriver library. It is used to specify the mechanism by which elements on a web page will be located. These locators will be used by the test automation code to find and interact with the corresponding elements on the web page. Using By ensures a consistent and reliable way to locate elements across different web pages and browsers.
 - **pages**: Contains classes representing specific pages on the Flanco.ro website. Each class encapsulates interactions and elements unique to that page.
 ```python
+from selenium.common import NoSuchElementException
 from browser import Browser
 from locators.LoginLocators import LoginLocators
 
@@ -199,16 +199,28 @@ class LoginPage(Browser):
         self.driver.get("https://www.flanco.ro/customer/account/login/referer/aHR0cHM6Ly93d3cuZmxhbmNvLnJvLz9nYWRfc291cmNlPTE%3D/")
 
     def enter_email(self, email):
-        self.driver.find_element(*LoginLocators.EMAIL_FIELD_SELECTOR).send_keys(email)
+        try:
+            self.driver.find_element(*LoginLocators.EMAIL_FIELD_SELECTOR).send_keys(email)
+        except NoSuchElementException:
+            print("Email field not found")
 
     def enter_password(self, password):
-        self.driver.find_element(*LoginLocators.PASSWORD_FIELD_SELECTOR).send_keys(password)
+        try:
+            self.driver.find_element(*LoginLocators.PASSWORD_FIELD_SELECTOR).send_keys(password)
+        except NoSuchElementException:
+            print("Password field not found")
 
     def click_autentifica_ma_button(self):
-        self.driver.find_element(*LoginLocators.LOGIN_BUTTON_SELECTOR).click()
+        try:
+            self.driver.find_element(*LoginLocators.LOGIN_BUTTON_SELECTOR).click()
+        except NoSuchElementException:
+            print("Autentifica-ma button not found")
 
     def get_error_message(self):
         return self.driver.find_element(*LoginLocators.ERROR_MESSAGE).text
+
+    def get_password_field_error_message(self):
+        return self.driver.find_element(*LoginLocators.PASSWORD_FIELD_ERROR).text
 
     def get_field_error_message(self):
         return self.driver.find_element(*LoginLocators.FIELD_ERROR).text
@@ -216,19 +228,41 @@ class LoginPage(Browser):
     def get_invalid_mail_error_message(self):
         return self.driver.find_element(*LoginLocators.INVALID_MAIL_ERROR).text
 
-    def get_short_password_error_message(self):
-        return self.driver.find_element(*LoginLocators.SHORT_PASSWORD_ERROR).text
+    def verify_valid_email_error(self):
+        actual_error_message = self.get_invalid_mail_error_message()
+        expected_error_message = 'Introduceți o adresă email validă (Ex: johndoe@domain.com).'
+        assert actual_error_message in expected_error_message
+
+    def verify_password_field_error_message(self):
+        actual_error_message = self.get_password_field_error_message()
+        expected_error_message = 'Acesta este un câmp obligatoriu.'
+        assert actual_error_message in expected_error_message
+
+    def verify_general_error_message(self):
+        actual_error_message = self.get_error_message()
+        expected_error_message = 'Conectarea la cont a fost incorectă sau contul dvs. este dezactivat temporar. Vă rugăm să așteptați și să încercați din nou mai târziu.'
+        assert actual_error_message in expected_error_message
+
+    def verify_email_field_error(self):
+        actual_error_message = self.get_field_error_message()
+        expected_error_message = 'Acesta este un câmp obligatoriu.'
+        assert actual_error_message in expected_error_message
+
+    def verify_short_password_error(self):
+        actual_error_message = self.get_password_field_error_message()
+        expected_error_message = 'Please enter 6 or more characters. Leading and trailing spaces will be ignored.'
+        assert actual_error_message in expected_error_message
 ```
 ```python
 from faker import Faker
 from browser import Browser
 from locators.RegisterLocators import RegisterLocators
 
-
 class Register(Browser):
 
     def navigate_to_register_page(self):
-        self.driver.get('https://www.flanco.ro/customer/account/create/?referer=aHR0cHM6Ly93d3cuZmxhbmNvLnJvLz9nYWRfc291cmNlPTE=')
+        self.driver.get('https://www.flanco.ro/customer/account/create/?referer'
+                        '=aHR0cHM6Ly93d3cuZmxhbmNvLnJvLz9nYWRfc291cmNlPTE=')
 
     def get_last_name(self, lastname):
         self.driver.find_element(*RegisterLocators.LAST_NAME_FIELD_SELECTOR).send_keys(lastname)
@@ -257,11 +291,8 @@ class Register(Browser):
     def get_wrong_email_error(self):
         return self.driver.find_element(*RegisterLocators.WRONG_EMAIL_ERROR).text
 
-    def get_short_password_error(self):
-        return self.driver.find_element(*RegisterLocators.SHORT_PASSWORD_ERROR).text
-
-    def get_characters_password_error(self):
-        return self.driver.find_element(*RegisterLocators.CHARACTERS_PASSWORD_ERROR).text
+    def get_password_error_message(self):
+        return self.driver.find_element(*RegisterLocators.PASSWORD_ERROR_MESSAGE).text
 
     def get_same_value_confirmation_password_error(self):
         return self.driver.find_element(*RegisterLocators.SAME_VALUE_CONFIRMATION_PASSWORD_ERROR).text
@@ -272,10 +303,53 @@ class Register(Browser):
     def get_successful_register_message(self):
         return self.driver.find_element(*RegisterLocators.SUCCESSFUL_REGISTER_MESSAGE).text
 
+    def get_same_email_error(self):
+        return self.driver.find_element(*RegisterLocators.SAME_EMAIL_REGISTRATION_ERROR).text
+
     def get_random_email(self):
         fake = Faker()
         email = fake.email()
         self.enter_email(email)
+
+    def verify_wrong_email_error(self):
+        expected_error_message = "Introduceți o adresă email validă (Ex: johndoe@domain.com)."
+        actual_error_message = self.get_wrong_email_error()
+        assert expected_error_message in actual_error_message
+
+    def verify_same_email_error(self):
+        expected_error_message = ("Există deja un cont înregistrat cu această adresă de emails. Dacă sunteți sigur că "
+                                  "este adresa dumneavoastră de email, faceți click aici pentru a obține parola și a "
+                                  "vă accesa contul.")
+        actual_error_message = self.get_same_email_error()
+        assert expected_error_message in actual_error_message
+
+
+    def verify_short_password_error(self):
+        expected_error_message = ("Lungimea minima a acestui camp trebuie sa fie egala sau mai mare de 8 simboluri. "
+                                  "Spatiile vor fi ignorate.")
+        actual_error_message = self.get_password_error_message()
+        assert expected_error_message in actual_error_message
+
+    def verify_characters_password_error(self):
+        expected_error_message = ("Minimul diferitelor clase de caractere din parola este de 3. Clase de caractere: "
+                                  "litere mici, majuscule, cifre, caractere speciale.")
+        actual_error_message = self.get_password_error_message()
+        assert expected_error_message in actual_error_message
+
+    def verify_same_value_confirmation_password_error(self):
+        expected_error_message = "Va rugam sa introduceti din nou aceeasi valoare."
+        actual_error_message = self.get_same_value_confirmation_password_error()
+        assert expected_error_message in actual_error_message
+
+    def verify_mandatory_fields_error(self):
+        expected_error_message = "Acesta este un câmp obligatoriu."
+        actual_error_message = self.get_mandatory_fields_error()
+        assert expected_error_message in actual_error_message
+
+    def verify_successful_register_message(self):
+        expected_message = "Vă mulțumim că v-ați înregistrat la Flanco"
+        actual_message = self.get_successful_register_message()
+        assert expected_message in actual_message
 ```
 faker: This library is used to generate fake data such as names and email addresses. In this particular case, the fake library is used to generate a new email address each time the registration functionality is tested with valid credentials. Without this library, the test would not pass because if the same email is entered twice, the account registration cannot be successful.
 
@@ -301,33 +375,23 @@ def step_impl(context):
 
 @then('I should see an error for valid email request')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_invalid_mail_error_message()
-    expected_error_message = 'Introduceți o adresă email validă (Ex: johndoe@domain.com).'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_valid_email_error()
 
 @then('I should see an error for password field')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_field_error_message()
-    expected_error_message = 'Acesta este un câmp obligatoriu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_password_field_error_message()
 
 @then('I should see an error message')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_error_message()
-    expected_error_message = 'Conectarea la cont a fost incorectă sau contul dvs. este dezactivat temporar. Vă rugăm să așteptați și să încercați din nou mai târziu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_general_error_message()
 
 @then('I should see an error under email field')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_field_error_message()
-    expected_error_message = 'Acesta este un câmp obligatoriu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_email_field_error()
 
 @then('I should see an error for short password')
 def step_imp(context):
-    actual_error_message = context.LoginPage.get_short_password_error_message()
-    expected_error_message = 'Please enter 6 or more characters. Leading and trailing spaces will be ignored.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_short_password_error()
 ```
 The following steps are tailored to the specific registration process of the Flanco.ro website, allowing for automated testing and validation of the registration feature.
 ```python
@@ -355,9 +419,9 @@ def step_impl(context, emails):
 def step_impl(context):
     context.Register.get_random_email()
 
-@when('I enter "{passwword}" in password field for registration')
-def step_impl(context, passwword):
-    context.Register.enter_password(passwword)
+@when('I enter "{password}" in password field for registration')
+def step_impl(context, password):
+    context.Register.enter_password(password)
 
 @when('I enter "{confpassw}" in confirmation password field for registration')
 def step_impl(context, confpassw):
@@ -366,56 +430,39 @@ def step_impl(context, confpassw):
 @when('I click on terms and conditions box')
 def step_impl(context):
     context.Register.terms_and_conditions()
-    time.sleep(2)
 
 @when('I press on ma inregistrez button')
 def step_impl(context):
     context.Register.press_ma_inregistrez_button()
-    time.sleep(2)
 
 @then('I should see an error message for using an email that has already been registered')
 def step_impl(context):
-    actual_message = context.Register.same_email_error()
-    expected_message = 'Există deja un cont înregistrat cu această adresă de emails. Dacă sunteți sigur că este adresa dumneavoastră de email, faceți click aici pentru a obține parola și a vă accesa contul.'
-    assert actual_message in expected_message
-    time.sleep(2)
+    context.Register.verify_same_email_error()
 
 @then('I should see a succsessful registration text message')
 def step_impl(context):
-    actual_alert_mesasge = context.Register.get_successful_register_message()
-    expected_alert_message = 'Vă mulțumim că v-ați înregistrat la Flanco'
-    assert actual_alert_mesasge in expected_alert_message
+    context.Register.verify_successful_register_message()
     time.sleep(2)
 
 @then('I should see an error for email')
 def step_impl(context):
-    expected_error_message = context.Register.get_wrong_email_error()
-    actual_error_message = "Introduceți o adresă email validă (Ex: johndoe@domain.com)."
-    assert expected_error_message in actual_error_message
+    context.Register.verify_wrong_email_error()
 
 @then('I should see an error message for short password')
 def step_impl(context):
-    expected_error_message = context.Register.get_short_password_error()
-    actual_error_message = "Lungimea minima a acestui camp trebuie sa fie egala sau mai mare de 8 simboluri. Spatiile vor fi ignorate."
-    assert expected_error_message in actual_error_message
+    context.Register.verify_short_password_error()
 
 @then('I should see an error for wrong characters on password field')
 def step_impl(context):
-    expected_error_message = context.Register.get_characters_password_error()
-    actual_error_message = "Minimul diferitelor clase de caractere din parola este de 3. Clase de caractere: litere mici, majuscule, cifre, caractere speciale."
-    assert expected_error_message in actual_error_message
+    context.Register.verify_characters_password_error()
 
 @then('I should see an error for same password on confirm password field')
 def step_impl(context):
-    expected_error_message = context.Register.get_same_value_confirmation_password_error()
-    actual_error_message = "Va rugam sa introduceti din nou aceeasi valoare."
-    assert expected_error_message in actual_error_message
+    context.Register.verify_same_value_confirmation_password_error()
 
 @then('I should see a mandatory fill field error for all the fields')
 def step_impl(context):
-    expected_error_message = context.Register.get_mandatory_fields_error()
-    actual_error_message = "Acesta este un câmp obligatoriu."
-    assert expected_error_message in actual_error_message
+    context.Register.verify_mandatory_fields_error()
 ```
 time: Used for introducing delays in the test execution, providing a pause between actions.
 
