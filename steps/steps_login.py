@@ -18,31 +18,21 @@ def step_impl(context):
 
 @then('I should see an error for valid email request')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_invalid_mail_error_message()
-    expected_error_message = 'Introduceți o adresă email validă (Ex: johndoe@domain.com).'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_valid_email_error()
 
 @then('I should see an error for password field')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_field_error_message()
-    expected_error_message = 'Acesta este un câmp obligatoriu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_password_field_error_message()
 
 @then('I should see an error message')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_error_message()
-    expected_error_message = 'Conectarea la cont a fost incorectă sau contul dvs. este dezactivat temporar. Vă rugăm să așteptați și să încercați din nou mai târziu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_general_error_message()
 
 @then('I should see an error under email field')
 def step_impl(context):
-    actual_error_message = context.LoginPage.get_field_error_message()
-    expected_error_message = 'Acesta este un câmp obligatoriu.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_email_field_error()
 
 @then('I should see an error for short password')
 def step_imp(context):
-    actual_error_message = context.LoginPage.get_short_password_error_message()
-    expected_error_message = 'Please enter 6 or more characters. Leading and trailing spaces will be ignored.'
-    assert actual_error_message in expected_error_message
+    context.LoginPage.verify_short_password_error()
 

@@ -17,7 +17,6 @@ Feature: Login Feature
     |  robert@email.ro    | wrongpass        |
 
 
-
   @login_wrong_email_format
   Scenario: Enter wrong email format
     When I enter "email.com" in email field

@@ -7,6 +7,7 @@ class LoginLocators:
     PASSWORD_FIELD_SELECTOR = (By.CSS_SELECTOR, '[name="login[password]"]')
     LOGIN_BUTTON_SELECTOR = (By.CSS_SELECTOR, '#send2')
     ERROR_MESSAGE = (By.CLASS_NAME, 'textMessageAddToCard')
-    FIELD_ERROR = (By.XPATH, '//div[contains(text(), "Acesta este un câmp obligatoriu.")]')
+    FIELD_ERROR = (By.CSS_SELECTOR, '[class="mage-error"]')
+    PASSWORD_FIELD_ERROR = (By.CSS_SELECTOR, '#pass-error')
     INVALID_MAIL_ERROR = (By.CSS_SELECTOR, '#email-error')
-    SHORT_PASSWORD_ERROR = (By.XPATH, '//div[contains(text(), "Please enter 6 or more characters. Leading and trailing spaces will be ignored.")]')
+
