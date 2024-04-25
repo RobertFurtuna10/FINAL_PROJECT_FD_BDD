@@ -41,6 +41,7 @@ def step_impl(context):
 @then('I should see an error message for using an email that has already been registered')
 def step_impl(context):
     context.Register.verify_same_email_error()
+    time.sleep(2)
 
 @then('I should see a succsessful registration text message')
 def step_impl(context):
