@@ -253,6 +253,7 @@ class LoginPage(Browser):
         expected_error_message = 'Please enter 6 or more characters. Leading and trailing spaces will be ignored.'
         assert actual_error_message in expected_error_message
 ```
+NoSuchElementException: is an exception that is raised when a specified element could not be found on the web page. In this context it's used within try blocks to handle cases where the specified elements for email field, password field, and login button cannot be located on the web page.
 ```python
 from faker import Faker
 from browser import Browser
@@ -438,6 +439,7 @@ def step_impl(context):
 @then('I should see an error message for using an email that has already been registered')
 def step_impl(context):
     context.Register.verify_same_email_error()
+    time.sleep(2)
 
 @then('I should see a succsessful registration text message')
 def step_impl(context):
